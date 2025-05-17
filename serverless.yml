@@ -1,0 +1,43 @@
+service: autodesk-assesment-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  httpApi:
+    payload: '2.0'
+  environment:
+    DB_PORT: ${env:DB_PORT}
+    DB_HOST: ${env:DB_HOST}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    REDIS_PORT: ${env:REDIS_PORT}
+    REDIS_HOST: ${env:REDIS_HOST}
+    DB_DATABASE: ${env:DB_DATABASE}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource: "*"
+
+functions:
+  uploadProduct:
+    handler: functions/uploadProduct.uploadProduct
+    events:
+      - httpApi:
+          path: /upload
+          method: POST
+
+  getAllProducts:
+    handler: functions/getAllProducts.getAllProducts
+    events:
+      - httpApi:
+          path: /products
+          method: GET
+
+plugins:
+  - serverless-plugin-dotenv
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: ${env:PORT, 3001}

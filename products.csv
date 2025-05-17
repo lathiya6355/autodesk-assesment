@@ -1,0 +1,3 @@
+name,image,price,qty,out_of_stock
+Apple,apple.jpg,1.2,100,false
+Banana,banana.jpg,0.5,200,false
